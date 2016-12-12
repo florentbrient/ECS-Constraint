@@ -25,4 +25,4 @@ References
 ----------
 
 Brient F and Schneider T (2016) Constraints on Climate Sensitivity from Space-Based Measurements of Low-Cloud Reflection. J. Clim., 29:5821–5835, DOI: 10.1175/JCLI-D-15-0897.1
-Burnham, K. P., and D. R. Anderson, 2010: Model Selection and Multimodel Inference: A Practical Information-Theoretic Approach. 2nd ed., Springer, New York, NY.
+Burnham K. P. and D. R. Anderson (2010) Model Selection and Multimodel Inference: A Practical Information-Theoretic Approach. 2nd ed., Springer, New York, NY.
