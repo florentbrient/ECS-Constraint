@@ -2,7 +2,7 @@
 Calcul of a posterior ECS probability distribution function weighted by how well models reproduce temporal variability
 
 The code originated from Brient and Schneider (16). 
-A preprocessing averaging has been made to identify temporal variability of monthly-mean variations of tropical low-cloud (TLC) regions.
+A preprocessing averaging (https://github.com/florentbrient/Cloud-variability-time-frequency) has been made to identify temporal variability of monthly-mean variations of tropical low-cloud (TLC) regions.
 
 ## Preprocessing
 ### Input
@@ -28,7 +28,7 @@ Values of Equilibrium climate sensitivity (ECS) for the 29 models are also liste
 ## Diagnostic calculation
 ### Definition
 - The original temporal variability is not needed. We use a statistical significant number
- of randomly-induced samples aiming to reproduce the uncertainty of the original temporal variability (Nb=100).
+ of randomly-created samples aiming to reproduce the uncertainty of the original temporal variability (Nb samples).
  This uncertainty can be produced by a bootstrapping procedure
 - The likelihood of a model given the observations and its related weight can be computed by :
   - A Kullback-Leibler measure (use_normal=0, by default). The divergence is the relative entropy between a model's PDF
@@ -39,7 +39,11 @@ Values of Equilibrium climate sensitivity (ECS) for the 29 models are also liste
   
 ### Input
 The original code makes use of the output data from the preprocessing analysis. 
-These data come from CMIP models or observations. Inputs used in Brient and Schneider (16) are listed in "datafile.mat"
+These data are listed for :
+ - Observations ('slope') : 200 bootstrap samples are created from co-variations based on 183 months from March 2000 through May 2015.
+ - CMIP models ('slopeobs') : 3*200 bootstrap samples are created from co-variations based on 3 time periods of 183 months from 1959 to 2005.
+ 
+Inputs listed in "datafile.mat" are those used in Brient and Schneider (16).
 
 
 ### Output
@@ -54,6 +58,9 @@ These data come from CMIP models or observations. Inputs used in Brient and Schn
 
 ## One supplementary routine needed to run the model:
 - confidence_intervals.mat : Compute confidence intervals 
+
+## Remarks
+- The code should be rewritten in Python for consistency with the preprocessing.
 
 
 References
