@@ -1,5 +1,5 @@
 # ECS-Constraint
-Calcul of a posterior ECS probability distribution function weighted by how well models reproduce temporal variability
+Calculation of a posterior ECS probability distribution function weighted by how well models reproduce temporal variability
 
 The code originated from Brient and Schneider (16). 
 A preprocessing averaging (https://github.com/florentbrient/Cloud-variability-time-frequency) is used to identify temporal variability of monthly-mean variations over tropical low-cloud (TLC) regions.
