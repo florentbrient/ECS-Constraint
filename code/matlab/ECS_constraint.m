@@ -1,4 +1,4 @@
-function [ECS_pdf,w_model,log_llh]=ECS_constraint(ECS,slope,slopeobs,use_normal)
+function [ECS_pdf,w_model,log_llh]=ECS_constraint(ECS,Namemodels,slope,slopeobs,use_normal)
 % Constraining ECS from temporal variability
 %
 % Bayesian Model Averaging (BMA): Using normal distribution for model
@@ -63,6 +63,8 @@ for i=1:m
             clf
             plot(xi, obs_pdf, 'g', xi, model_pdf, 'r')
             title(['Red : Model ',i,' ; Green : Obs',' ; llh=', num2str(log_llh(i))])
+            figurename = strcat('../../figures/','Prior_posterior_PDF_',Namemodels{i},'.png');
+            saveas(gcf,figurename)
          end
     end
 end
@@ -76,6 +78,17 @@ w_model= w/sum(w);
 
 % compute unweigthed (original) PDF 
 [ECS_pdf0, x0]   = ksdensity(ECS_model);
+% quick diagnostics: prior mode and confidence intervals
+[~, imax]   = max(ECS_pdf0);
+ECS_mode0   = x0(imax);                                            % mode of the posterior PDF
+[ECS0_l90, ECS0_u90] = confidence_intervals(ECS_pdf0, x0, .9);       % 90% confidence interval
+[ECS0_l66, ECS0_u66] = confidence_intervals(ECS_pdf0, x0, .66);      % 66% confidence interval
+% Write prior informations
+text_prior = ['Prior mode ', num2str(ECS_mode0), ...
+     ' [', num2str(ECS0_l90(end)), ' (',num2str(ECS0_l66(end)),'),  ',...
+     ' (', num2str(ECS0_u66(end)), ') ',num2str(ECS0_u90(end)),']' ];
+disp(text_prior)
+
 % compute posterior PDF 
 [ECS_pdf, x]   = ksdensity(ECS_model, 'weights', w_model);
 
@@ -84,17 +97,29 @@ w_model= w/sum(w);
 ECS_mode   = x(imax);                                            % mode of the posterior PDF
 [ECS_l90, ECS_u90] = confidence_intervals(ECS_pdf, x, .9);       % 90% confidence interval
 [ECS_l66, ECS_u66] = confidence_intervals(ECS_pdf, x, .66);      % 66% confidence interval
-    
-disp(['max_llh=', num2str(max_llh), ' : Posterior mode ', num2str(ECS_mode), ...
+% Write posterior informations
+text_post = ['max_llh=', num2str(max_llh), ' : Posterior mode ', num2str(ECS_mode), ...
      ' [', num2str(ECS_l90(end)), ' (',num2str(ECS_l66(end)),'),  ',...
-     ' (', num2str(ECS_u66(end)), ') ',num2str(ECS_u90(end)),']' ])
+     ' (', num2str(ECS_u66(end)), ') ',num2str(ECS_u90(end)),']' ];
+disp(text_post)
+ 
 
+% Save prior and posterior informations
+fileID = fopen(['../../data/','ECS_prior.txt'],'w');
+fprintf(fileID,text_prior);
+fclose(fileID);
+fileID = fopen(['../../data/','ECS_posterior.txt'],'w');
+fprintf(fileID,text_post);
+fclose(fileID);
+ 
 % Final figure (prior and posterior PDF of ECS)
 if make_plots
    figure(i);
    clf
    plot(x0, ECS_pdf0, 'k-', x, ECS_pdf, 'k--')
    title(['Prior (-) and Posterior (--) PDF of ECS (',num2str(m),' models)'])
+   figurename = strcat('../../figures/','Posterior_ECS_',num2str(i),'models','.png');
+   saveas(gcf,figurename)
 end
  
 end
